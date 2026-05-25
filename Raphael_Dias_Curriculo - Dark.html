@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raphael Dias — Currículo</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black:   #0A0A0A;
+  --dark:    #111111;
+  --card:    #161616;
+  --card2:   #1C1C1C;
+  --border:  #2A2A2A;
+  --border2: #333333;
+  --white:   #F0F0F0;
+  --gray:    #888888;
+  --gray2:   #BBBBBB;
+  --amber:   #E8820C;
+  --amber2:  #F5A030;
+  --amber3:  #FFBF5A;
+  --red:     #C0392B;
+  --red2:    #E74C3C;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── BACKGROUND ── */
+.bg-wrap {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+}
+.bg-noise {
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+}
+.bg-glow {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 5% 10%, rgba(232,130,12,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 95% 90%, rgba(192,57,43,0.05) 0%, transparent 50%);
+}
+.bg-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* ── SCAN LINE ── */
+.scanline {
+  position: fixed;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(232,130,12,0.15), rgba(232,130,12,0.35), rgba(232,130,12,0.15), transparent);
+  z-index: 5;
+  pointer-events: none;
+  animation: scan 8s ease-in-out infinite;
+}
+@keyframes scan {
+  0%   { top: -2px; opacity: 0; }
+  5%   { opacity: 1; }
+  95%  { opacity: 0.6; }
+  100% { top: 100vh; opacity: 0; }
+}
+
+/* ── PARTICLES ── */
+.particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.particle {
+  position: absolute; border-radius: 50%; opacity: 0;
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 0.5; }
+  100% { transform: translateY(-80px) scale(1.2); opacity: 0; }
+}
+
+/* ── PAGE ── */
+.page {
+  position: relative; z-index: 10;
+  max-width: 860px; margin: 0 auto;
+  padding: clamp(30px, 6vw, 70px) clamp(18px, 5vw, 48px) 80px;
+}
+
+/* ── HEADER ── */
+.header {
+  position: relative;
+  padding: clamp(34px, 6vw, 60px) clamp(24px, 5vw, 56px);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin-bottom: 52px;
+  overflow: hidden;
+  opacity: 0;
+  animation: fadeSlide 1s cubic-bezier(0.22,1,0.36,1) 0.1s forwards;
+}
+
+/* animated top bar */
+.header::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--red), var(--amber), var(--amber3), var(--amber), var(--red));
+  background-size: 300% 100%;
+  animation: barSlide 4s linear infinite;
+}
+@keyframes barSlide {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 300% 0%; }
+}
+
+/* corner accent */
+.header::after {
+  content: '';
+  position: absolute; bottom: 0; right: 0;
+  width: 180px; height: 180px;
+  border-bottom: 1px solid rgba(232,130,12,0.08);
+  border-right: 1px solid rgba(232,130,12,0.08);
+  border-radius: 0 0 4px 0;
+}
+
+.corner-tl {
+  position: absolute; top: 16px; left: 16px;
+  width: 18px; height: 18px;
+  border-top: 1px solid var(--amber);
+  border-left: 1px solid var(--amber);
+}
+.corner-br {
+  position: absolute; bottom: 16px; right: 16px;
+  width: 18px; height: 18px;
+  border-bottom: 1px solid var(--red);
+  border-right: 1px solid var(--red);
+}
+
+.header-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.25em;
+  color: var(--amber); text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.header-tag::before {
+  content: '';
+  display: inline-block; width: 18px; height: 1px;
+  background: var(--amber);
+}
+
+.header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 6vw, 50px);
+  font-weight: 900; line-height: 1.05;
+  color: var(--white);
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+.header h1 .name-accent {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--amber2);
+}
+
+.header-role {
+  font-size: clamp(11px, 2vw, 13px);
+  font-weight: 400; letter-spacing: 0.12em;
+  color: var(--gray); text-transform: uppercase;
+  margin-bottom: 28px;
+}
+.header-role span { color: var(--red2); }
+
+.contacts {
+  display: flex; flex-wrap: wrap;
+  gap: 6px 18px;
+}
+.contact-item {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 11px; font-family: 'DM Mono', monospace;
+  color: var(--gray); text-decoration: none;
+  transition: color 0.25s;
+}
+.contact-item:hover { color: var(--amber2); }
+.contact-item .cdot {
+  width: 3px; height: 3px; border-radius: 50%;
+  background: var(--amber); flex-shrink: 0;
+  transition: background 0.25s;
+}
+.contact-item:hover .cdot { background: var(--amber3); }
+.contact-item.static { cursor: default; }
+.contact-item.static:hover { color: var(--gray); }
+
+/* ── SECTIONS ── */
+.section {
+  margin-bottom: 48px;
+  /* reveal: start collapsed/invisible */
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1),
+              transform 0.7s cubic-bezier(0.22,1,0.36,1);
+}
+.section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sec-head {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 22px;
+}
+.sec-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 0.15em;
+  color: var(--red2); flex-shrink: 0;
+}
+.sec-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(15px, 3vw, 18px);
+  font-weight: 700; color: var(--white);
+  flex-shrink: 0;
+}
+.sec-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, var(--border2), transparent);
+}
+.sec-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--amber); flex-shrink: 0;
+  animation: pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.6); }
+}
+
+/* ── TEXT BLOCK ── */
+.text-block {
+  font-size: clamp(13px, 2vw, 14px);
+  line-height: 1.8; color: var(--gray2); font-weight: 300;
+}
+.text-block strong { color: var(--white); font-weight: 500; }
+
+/* ── JOB CARDS ── */
+.job-card {
+  position: relative;
+  padding: clamp(18px, 3vw, 26px) clamp(18px, 3vw, 28px) clamp(18px, 3vw, 26px) clamp(22px, 4vw, 34px);
+  margin-bottom: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  /* card reveal: starts "closed" (scaleY 0 from top, clipped) */
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 0.65s cubic-bezier(0.22,1,0.36,1),
+              border-color 0.3s, background 0.3s, transform 0.3s;
+}
+.job-card.revealed {
+  clip-path: inset(0 0 0% 0);
+}
+.job-card:hover {
+  border-color: var(--border2);
+  background: var(--card2);
+  transform: translateX(4px);
+}
+
+/* left accent bar */
+.job-card::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: linear-gradient(180deg, var(--amber), var(--red));
+  transition: width 0.3s;
+}
+.job-card:hover::before { width: 4px; }
+
+/* red top-right corner accent */
+.job-card::after {
+  content: '';
+  position: absolute; top: 0; right: 0;
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 0 14px 14px 0;
+  border-color: transparent var(--red) transparent transparent;
+  opacity: 0.6;
+}
+
+.job-top {
+  display: flex; justify-content: space-between;
+  align-items: flex-start; flex-wrap: wrap; gap: 6px;
+  margin-bottom: 5px;
+}
+.job-company {
+  font-weight: 600; font-size: clamp(13px, 2.5vw, 15px);
+  color: var(--white);
+}
+.job-period {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; color: var(--amber);
+  padding: 2px 8px;
+  border: 1px solid rgba(232,130,12,0.3);
+  border-radius: 2px;
+  background: rgba(232,130,12,0.06);
+  white-space: nowrap;
+}
+.job-title {
+  font-size: clamp(12px, 2vw, 13px); color: var(--amber2);
+  font-weight: 500; margin-bottom: 3px; letter-spacing: 0.03em;
+}
+.job-location {
+  font-size: 10px; color: var(--gray);
+  font-family: 'DM Mono', monospace; margin-bottom: 14px;
+}
+.job-bullets { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+.job-bullets li {
+  font-size: clamp(12px, 2vw, 13px);
+  color: var(--gray2); line-height: 1.6;
+  display: flex; gap: 10px;
+}
+.job-bullets li::before {
+  content: '›'; color: var(--amber); font-size: 16px;
+  line-height: 1.45; flex-shrink: 0;
+}
+
+/* ── EDUCATION ── */
+.edu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+.edu-card {
+  padding: 20px 22px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 3px; position: relative; overflow: hidden;
+  transition: border-color 0.3s, background 0.3s;
+}
+.edu-card::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--amber), var(--red));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.edu-card:hover::before { transform: scaleX(1); }
+.edu-card:hover { border-color: var(--border2); background: var(--card2); }
+.edu-inst {
+  font-size: 13px; font-weight: 600; color: var(--amber3); margin-bottom: 4px;
+}
+.edu-deg {
+  font-size: 13px; color: var(--white); margin-bottom: 6px; line-height: 1.4;
+}
+.edu-status {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; color: var(--red2); letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── SKILLS ── */
+.skills-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+.skill-tag {
+  font-size: 11px; color: var(--gray2);
+  padding: 5px 12px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 2px;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  cursor: default;
+  /* pop-in handled by JS on reveal */
+  opacity: 0; transform: scale(0.85);
+  transition: opacity 0.4s ease, transform 0.4s ease,
+              background 0.2s, border-color 0.2s, color 0.2s;
+}
+.skill-tag.popped {
+  opacity: 1; transform: scale(1);
+}
+.skill-tag:hover {
+  background: rgba(232,130,12,0.08);
+  border-color: rgba(232,130,12,0.35);
+  color: var(--amber2);
+}
+.skill-tag.hi {
+  background: rgba(232,130,12,0.07);
+  border-color: rgba(232,130,12,0.25);
+  color: var(--amber3);
+}
+.skill-tag.hi:hover {
+  background: rgba(232,130,12,0.15);
+  border-color: rgba(232,130,12,0.5);
+  color: var(--amber3);
+}
+
+/* ── COURSES ── */
+.courses-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.course-pill {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 11px; color: var(--gray);
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 20px; background: var(--card);
+  transition: all 0.25s;
+}
+.course-pill:hover {
+  color: var(--white); border-color: var(--border2);
+  background: var(--card2);
+}
+.course-pill .dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--amber); flex-shrink: 0;
+}
+.course-pill .dot.red { background: var(--red2); }
+
+/* ── INFO ADICIONAL ── */
+.info-list { display: flex; flex-direction: column; gap: 10px; }
+.info-item {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 13px; color: var(--gray2);
+}
+.info-item::before {
+  content: '';
+  width: 22px; height: 1px; flex-shrink: 0;
+  background: linear-gradient(90deg, var(--amber), var(--red));
+}
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center; margin-top: 60px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.footer-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; color: var(--border2);
+  letter-spacing: 0.2em; text-transform: uppercase;
+}
+.footer-name span { color: var(--amber); }
+
+/* ── KEYFRAMES ── */
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 520px) {
+  .header h1 { font-size: 26px; }
+  .contacts { gap: 5px 12px; }
+  .job-card { padding: 16px 16px 16px 22px; }
+  .corner-tl, .corner-br { display: none; }
+}
+
+@media print {
+  body { background: #fff; color: #111; }
+  .bg-wrap, .particles, .scanline { display: none; }
+  .section { opacity: 1 !important; transform: none !important; }
+  .job-card { clip-path: none !important; }
+  .skill-tag { opacity: 1 !important; transform: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-wrap">
+  <div class="bg-noise"></div>
+  <div class="bg-glow"></div>
+  <div class="bg-grid"></div>
+</div>
+<div class="scanline"></div>
+<div class="particles" id="pts"></div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="corner-tl"></div>
+    <div class="corner-br"></div>
+    <div class="header-tag">Currículo Profissional</div>
+    <h1>Raphael de Amorim<br><span class="name-accent">Rodrigues Dias</span></h1>
+    <div class="header-role">Controlador de Manutenção (PCM) <span>·</span> Técnico em Mecânica</div>
+    <div class="contacts">
+      <div class="contact-item static">
+        <div class="cdot"></div>Serra – ES
+      </div>
+      <a class="contact-item" href="https://wa.me/5527995836888" target="_blank">
+        <div class="cdot"></div>+55 (27) 99583-6888 · WhatsApp
+      </a>
+      <a class="contact-item" href="mailto:raphaeldeamorimrodriguesdias@gmail.com">
+        <div class="cdot"></div>raphaeldeamorimrodriguesdias@gmail.com
+      </a>
+      <a class="contact-item" href="https://www.linkedin.com/in/raphaeldeamorimrodriguesdias/" target="_blank">
+        <div class="cdot"></div>linkedin.com/in/raphaeldeamorimrodriguesdias
+      </a>
+    </div>
+  </header>
+
+  <!-- 01 OBJETIVO -->
+  <section class="section" data-delay="0">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <h2 class="sec-title">Objetivo</h2>
+      <div class="sec-line"></div>
+      <div class="sec-dot"></div>
+    </div>
+    <p class="text-block">
+      Atuar na área de <strong>Planejamento e Controle de Manutenção (PCM)</strong>, contribuindo com experiência prática em manutenção mecânica, planejamento e controle de atividades, gestão de ordens de serviço e acompanhamento de indicadores operacionais.
+    </p>
+  </section>
+
+  <!-- 02 RESUMO -->
+  <section class="section" data-delay="80">
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <h2 class="sec-title">Resumo Profissional</h2>
+      <div class="sec-line"></div>
+      <div class="sec-dot"></div>
+    </div>
+    <p class="text-block">
+      Profissional com sólida experiência em <strong>manutenção industrial</strong>, com atuação em PCM, manutenção mecânica de equipamentos pesados e suporte operacional em ambientes industriais e ferroviários. Vivência em planejamento de manutenções preventivas e corretivas, elaboração e controle de ordens de serviço, contato com fornecedores, gestão de materiais e acompanhamento de indicadores. Experiência prática em <strong>motores diesel Caterpillar e Scania</strong>, sistemas hidráulicos, pneumáticos e componentes de tração. Formação técnica em Mecânica e graduação em Análise e Desenvolvimento de Sistemas, com interesse em tecnologia aplicada à manutenção e melhoria contínua.
+    </p>
+  </section>
+
+  <!-- 03 EXPERIÊNCIA -->
+  <section class="section" data-delay="100">
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <h2 class="sec-title">Experiência Profissional</h2>
+      <div class="sec-line"></div>
+      <div class="sec-dot"></div>
+    </div>
+
+    <div class="job-card">
+      <div class="job-top">
+        <div class="job-company">Pelicano Construções</div>
+        <div class="job-period">Mai/2025 – Atual</div>
+      </div>
+      <div class="job-title">Controlador de Manutenção (PCM)</div>
+      <div class="job-location">Serra – ES</div>
+      <ul class="job-bullets">
+        <li>Planejamento e acompanhamento de manutenções preventivas e corretivas</li>
+        <li>Elaboração e controle de Ordens de Serviço (OS)</li>
+        <li>Controle de abastecimento e disponibilidade de equipamentos</li>
+        <li>Suporte no controle de materiais e solicitação de compras</li>
+        <li>Contato com fornecedores para cotação e acompanhamento de demandas</li>
+        <li>Controle de calibragem, medição de pneus e material rodante (tratores de esteira e escavadeiras)</li>
+        <li>Apoio às rotinas de controle e gestão da manutenção</li>
+      </ul>
+    </div>
+
+    <div class="job-card">
+      <div class="job-top">
+        <div class="job-company">Vallourec Coating Solutions</div>
+        <div class="job-period">Mai/2024 – Mar/2025</div>
+      </div>
+      <div class="job-title">Auxiliar de Manutenção</div>
+      <div class="job-location">Serra – ES</div>
+      <ul class="job-bullets">
+        <li>Apoio às rotinas administrativas e operacionais da manutenção</li>
+        <li>Controle de materiais, notas fiscais e processos internos</li>
+        <li>Desenvolvimento de controles para histórico de manutenção e treinamentos</li>
+        <li>Elaboração de SOP (Procedimento Operacional Padrão) e AR (Análise de Risco)</li>
+        <li>Treinamento de colaboradores sobre procedimentos e segurança operacional</li>
+        <li>Suporte à organização documental e controle de informações da manutenção</li>
+      </ul>
+    </div>
+
+    <div class="job-card">
+      <div class="job-top">
+        <div class="job-company">Pelicano Construções</div>
+        <div class="job-period">Jun/2021 – Jan/2024</div>
+      </div>
+      <div class="job-title">Técnico de Mecânica / Operador Mantenedor</div>
+      <div class="job-location">Serra – ES</div>
+      <ul class="job-bullets">
+        <li>Manutenção mecânica de equipamentos pesados</li>
+        <li>Montagem e manutenção de motores diesel Caterpillar e Scania</li>
+        <li>Manutenção de bombas hidráulicas, cilindros hidráulicos e pneumáticos</li>
+        <li>Manutenção de componentes do sistema de tração</li>
+        <li>Operação de máquinas ferroviárias Plasser 08-16 SH e PBR 400</li>
+        <li>Apoio às atividades de manutenção corretiva e preventiva</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 04 FORMAÇÃO -->
+  <section class="section" data-delay="80">
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <h2 class="sec-title">Formação Acadêmica</h2>
+      <div class="sec-line"></div>
+      <div class="sec-dot"></div>
+    </div>
+    <div class="edu-grid">
+      <div class="edu-card">
+        <div class="edu-inst">FIAP</div>
+        <div class="edu-deg">Análise e Desenvolvimento de Sistemas</div>
+        <div class="edu-status">✓ Concluído</div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-inst">CEDTEC</div>
+        <div class="edu-deg">Técnico em Mecânica</div>
+        <div class="edu-status">✓ Concluído</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 COMPETÊNCIAS -->
+  <section class="section" id="skills-sec" data-delay="80">
+    <div class="sec-head">
+      <span class="sec-num">05</span>
+      <h2 class="sec-title">Competências Técnicas</h2>
+      <div class="sec-line"></div>
+      <div class="sec-dot"></div>
+    </div>
+    <div class="skills-wrap" id="skills-wrap">
+      <div class="skill-tag hi">PCM</div>
+      <div class="skill-tag hi">Manutenção Preventiva e Corretiva</div>
+      <div class="skill-tag hi">Ordens de Serviço (OS)</div>
+      <div class="skill-tag">Motores Diesel Caterpillar / Scania</div>
+      <div class="skill-tag">Sistemas Hidráulicos e Pneumáticos</div>
+      <div class="skill-tag">Controle Dimensional de Motores</div>
+      <div class="skill-tag">Medição de Material Rodante</div>
+      <div class="skill-tag">Indicadores de Manutenção (KPIs)</div>
+      <div class="skill-tag">Gestão de Materiais e Compras</div>
+      <div class="skill-tag">Elaboração de SOP e AR</div>
+      <div class="skill-tag">Excel / Pacote Office</div>
+      <div class="skill-tag">Equipamentos Pesados</div>
+      <div class="skill-tag">Organização de Processos</div>
+      <div class="skill-tag">Trabalho em Equipe</div>
+    </div>
+  </section>
+
+  <!-- 06 CURSOS -->
+  <section class="section" data-delay="80">
+    <div class="sec-head">
+      <span class="sec-num">06</span>
+      <h2 class="sec-title">Cursos e Qualificações</h2>
+      <div class="sec-line"></div>
+      <div class="sec-dot"></div>
+    </div>
+    <div class="courses-row">
+      <div class="course-pill"><div class="dot"></div>Lógica de Programação</div>
+      <div class="course-pill"><div class="dot"></div>JavaScript</div>
+      <div class="course-pill"><div class="dot"></div>HTML e CSS</div>
+      <div class="course-pill"><div class="dot"></div>Dominando IoT</div>
+      <div class="course-pill"><div class="dot red"></div>Inglês – em andamento</div>
+    </div>
+  </section>
+
+  <!-- 07 INFO ADICIONAL -->
+  <section class="section" data-delay="80">
+    <div class="sec-head">
+      <span class="sec-num">07</span>
+      <h2 class="sec-title">Informações Adicionais</h2>
+      <div class="sec-line"></div>
+      <div class="sec-dot"></div>
+    </div>
+    <div class="info-list">
+      <div class="info-item">Disponibilidade para atuação na área industrial</div>
+      <div class="info-item">Interesse em desenvolvimento profissional em PCM e gestão da manutenção</div>
+      <div class="info-item">Experiência em ambientes industriais e manutenção pesada</div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-name"><span>Raphael de Amorim Rodrigues Dias</span> · <span>Serra, ES</span> · <span>2026</span></div>
+  </footer>
+
+</div><!-- /page -->
+
+<script>
+/* ── PARTICLES ── */
+(function(){
+  const c = document.getElementById('pts');
+  for(let i=0;i<20;i++){
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const sz = Math.random()*2.5+0.8;
+    const isAmber = Math.random() > 0.3;
+    p.style.cssText = `
+      width:${sz}px;height:${sz}px;
+      left:${Math.random()*100}%;
+      background:${isAmber?'#E8820C':'#C0392B'};
+      animation-duration:${Math.random()*20+15}s;
+      animation-delay:${Math.random()*15}s;
+    `;
+    c.appendChild(p);
+  }
+})();
+
+/* ── SCROLL REVEAL ── */
+const sections = document.querySelectorAll('.section');
+const cards    = document.querySelectorAll('.job-card');
+const tags     = document.querySelectorAll('.skill-tag');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(!entry.isIntersecting) return;
+    const el   = entry.target;
+    const delay = parseInt(el.dataset.delay||'0');
+
+    if(el.classList.contains('section')){
+      setTimeout(()=> el.classList.add('visible'), delay);
+
+      /* reveal job cards inside this section */
+      const jc = el.querySelectorAll('.job-card');
+      jc.forEach((card,i)=>{
+        setTimeout(()=> card.classList.add('revealed'), delay + 200 + i*180);
+      });
+
+      /* pop skill tags if this is the skills section */
+      const st = el.querySelectorAll('.skill-tag');
+      st.forEach((tag,i)=>{
+        setTimeout(()=> tag.classList.add('popped'), delay + 150 + i*55);
+      });
+    }
+    observer.unobserve(el);
+  });
+}, { threshold: 0.12 });
+
+sections.forEach(s => observer.observe(s));
+
+/* ── HEADER PARALLAX ── */
+const header = document.querySelector('.header');
+window.addEventListener('mousemove', e => {
+  const x = (e.clientX/window.innerWidth - 0.5)*6;
+  const y = (e.clientY/window.innerHeight - 0.5)*3;
+  header.style.transform = `perspective(1200px) rotateY(${x*0.15}deg) rotateX(${-y*0.15}deg)`;
+}, {passive:true});
+</script>
+</body>
+</html>
